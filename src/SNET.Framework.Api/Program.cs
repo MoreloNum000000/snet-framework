@@ -7,16 +7,18 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using SNET.Framework.Api.DependencyConfig;
 using SNET.Framework.Api.Metricas;
+using SNET.Framework.Domain.Audit;
 using SNET.Framework.Domain.Notifications.Email;
+using SNET.Framework.Infrastructure.Middlewares;
 using SNET.Framework.Infrastructure.Notifications.Email;
 using SNET.Framework.Persistence;
+using SNET.Framework.Persistence.Audit;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuración de servicios
 builder.Services.AddCarter();
-
 builder.AddRepositories();
-//builder.AddLogger();
 builder.AddEmailSettings();
 
 builder.Services.AddOpenTelemetry()
@@ -29,7 +31,6 @@ builder.Services.AddOpenTelemetry()
         metrics
             .AddAspNetCoreInstrumentation()
             .AddHttpClientInstrumentation();
-
         metrics.AddOtlpExporter();
     })
     .WithTracing(tracing =>
@@ -38,13 +39,12 @@ builder.Services.AddOpenTelemetry()
             .AddAspNetCoreInstrumentation()
             .AddHttpClientInstrumentation()
             .AddEntityFrameworkCoreInstrumentation();
-
         tracing.AddOtlpExporter();
     });
 
-    builder.Logging.AddOpenTelemetry(loggin => loggin.AddOtlpExporter());
+builder.Logging.AddOpenTelemetry(loggin => loggin.AddOtlpExporter());
 
-builder.Services.AddMediatR(x=>
+builder.Services.AddMediatR(x =>
 {
     x.RegisterServicesFromAssembly(typeof(SNET.Framework.Features.AssemblyReference).Assembly);
 });
@@ -62,11 +62,12 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 }, ServiceLifetime.Scoped);
 
 builder.Services.AddValidatorsFromAssembly(typeof(SNET.Framework.Features.AssemblyReference).Assembly, ServiceLifetime.Scoped);
-
 builder.Services.AddScoped<IEmailNotifications, SmtpNotifications>();
+builder.Services.AddScoped<IAuditService, AuditService>(); // Auditoría
 
 var app = builder.Build();
 
+// Configuración de middlewares
 app.UseOpenApi();
 app.UseSwaggerUi(settings => { settings.Path = "/docs"; });
 app.UseReDoc(settings =>
@@ -74,6 +75,8 @@ app.UseReDoc(settings =>
     settings.Path = "/redoc";
     settings.DocumentPath = "/swagger/v1/swagger.json";
 });
+
+app.UseMiddleware<AuditMiddleware>(); // Middleware de auditoría
 
 app.MapCarter();
 

@@ -1,5 +1,6 @@
 ﻿using Carter;
 using MediatR;
+using SNET.Framework.Domain.Audit;
 using SNET.Framework.Domain.Shared;
 using SNET.Framework.Features.Users.Commands;
 using SNET.Framework.Features.Users.Commands.AssignRole;
@@ -11,6 +12,7 @@ namespace SNET.Framework.Api.EndPoints
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
+
             app.MapPost("Users", async (CreateUserCommand command, IMediator mediator) =>
             {
                 var res = await mediator.Send(command);
@@ -21,13 +23,15 @@ namespace SNET.Framework.Api.EndPoints
                 }
                 else
                 {
+
                     return Results.BadRequest(res);
                 }
             })
             .WithName("CreateUser")
             .WithTags("Users")
             .Produces<Result>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status400BadRequest);
+            .Produces(StatusCodes.Status400BadRequest)
+            .WithMetadata(new AuditDescriptionAttribute("Crear un nuevo usuario"));
 
 
             app.MapPost("Users/Role", async (AssignRoleToUserCommand command, IMediator mediator) =>
