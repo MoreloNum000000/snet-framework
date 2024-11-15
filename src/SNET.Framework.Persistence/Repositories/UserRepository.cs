@@ -11,27 +11,33 @@ namespace SNET.Framework.Persistence.Repositories
 {
     public class UserRepository : GenericRepository<User>, IUserRepository
     {
-
         public UserRepository(ApiDbContext context) : base(context)
         {
         }
 
         public async Task<User> GetByEmailAsync(string email)
         {
-            return await  _context.Set<User>().FirstOrDefaultAsync(x => x.Email == email);
+            return await _context.Set<User>().FirstOrDefaultAsync(x => x.Email == email);
         }
 
         public async Task<List<User>> GetAllAsync()
         {
-           return await _context.Set<User>().ToListAsync();
+            return await _context.Set<User>().ToListAsync();
         }
 
         public async Task<User> GetByIdWithRoles(Guid userId)
         {
             return await _context.Set<User>()
-                .Include(x=>x.Roles)
-                .Where(x=>x.Id == userId)
+                .Include(x => x.Roles)  
+                .Where(x => x.Id == userId)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<User> GetByIdAsync(Guid userId)
+        {
+            return await _context.Set<User>()
+                .Where(x => x.Id == userId)
+                .FirstOrDefaultAsync();  
         }
     }
 }

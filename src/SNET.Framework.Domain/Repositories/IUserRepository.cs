@@ -12,5 +12,6 @@ namespace SNET.Framework.Domain.Repositories
         Task<User> GetByIdWithRoles(Guid userId);
         Task<User> GetByEmailAsync(string email);
         Task<List<User>> GetAllAsync();
+        Task<User> GetByIdAsync(Guid userId);
     }
 }
