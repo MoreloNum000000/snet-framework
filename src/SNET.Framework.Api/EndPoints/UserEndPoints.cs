@@ -30,7 +30,8 @@ namespace SNET.Framework.Api.EndPoints
             .WithName("CreateUser")
             .WithTags("Users")
             .Produces<Result>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status400BadRequest);
+            .Produces(StatusCodes.Status400BadRequest)
+            .RequireAuthorization();
 
 
             usersRoute.MapPost("/Role", async (AssignRoleToUserCommand command, IMediator mediator) =>

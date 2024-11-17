@@ -28,10 +28,16 @@ namespace SNET.Framework.Persistence.Repositories
 
         public async Task<List<Auditory>> GetByUserIdAsync(string userId)
         {
-            return await _context.Set<Auditory>()
-                .Where(a => a.UserId == userId)
-                .ToListAsync();
+            if (Guid.TryParse(userId, out Guid userGuid))
+            {
+                return await _context.Set<Auditory>()
+                    .Where(a => a.UserId == userGuid)  // Compara con Guid
+                    .ToListAsync();
+            }
+
+            return new List<Auditory>();  // Retorna una lista vacía si el string no es un Guid válido
         }
+
 
         public async Task<List<Auditory>> GetByLevelIdAsync(int levelId)
         {
