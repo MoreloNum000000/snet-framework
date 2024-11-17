@@ -6,6 +6,7 @@ using SNET.Framework.Domain.Autentications;
 using SNET.Framework.Domain.Notifications.Email;
 using SNET.Framework.Domain.Repositories;
 using SNET.Framework.Domain.UnitOfWork;
+using SNET.Framework.Features.Services;
 using SNET.Framework.Infrastructure.Autentications;
 using SNET.Framework.Persistence.Repositories;
 using SNET.Framework.Persistence.UnitOfWork;
@@ -19,7 +20,9 @@ namespace SNET.Framework.Api.DependencyConfig
         {
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            builder.Services.AddScoped<IAuditoryRepository, AuditoryRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IAuditService, AuditService>();
 
             builder.Services.AddScoped<IManagerToken, ManagerToken>();
         }

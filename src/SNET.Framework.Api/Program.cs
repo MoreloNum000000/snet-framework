@@ -18,6 +18,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCarter();
+builder.Services.AddHttpContextAccessor();  // Asegúrate de que esto esté agregado
 
 builder.AddRepositories();
 //builder.AddLogger();

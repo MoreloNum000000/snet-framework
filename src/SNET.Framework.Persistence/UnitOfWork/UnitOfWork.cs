@@ -13,7 +13,7 @@ public class UnitOfWork : IUnitOfWork
     public UnitOfWork(ApiDbContext context,
         ILogger<ApiDbContext> logger,
         IPublisher publisher)
-    {
+    { 
         _context = context;
         _logger = logger;
         _publisher = publisher;

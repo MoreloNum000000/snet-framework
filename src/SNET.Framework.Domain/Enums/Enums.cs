@@ -19,3 +19,23 @@ public enum RoleUser
     Admin = 2,
     Super = 3
 }
+
+public enum AuditCrudOperation
+{
+    Insert = 1,
+    Update = 2,
+    Delete = 3,
+    Upsert = 4
+}
+
+public enum AuditLevel
+
+{
+    Trace = 1,
+    Debug = 2,
+    Information = 3,
+    Warning = 4,
+    Error = 5,
+    Critical = 6
+}
+

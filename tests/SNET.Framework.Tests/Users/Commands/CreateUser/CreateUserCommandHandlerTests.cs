@@ -5,6 +5,7 @@ using SNET.Framework.Domain.Entities;
 using SNET.Framework.Domain.Repositories;
 using SNET.Framework.Domain.Shared;
 using SNET.Framework.Domain.UnitOfWork;
+using SNET.Framework.Features.Services;
 using SNET.Framework.Features.Users.Commands;
 
 namespace SNET.Framework.Tests.Users.Commands.CreateUser;
@@ -12,6 +13,7 @@ namespace SNET.Framework.Tests.Users.Commands.CreateUser;
 public class CreateUserCommandHandlerTests
 {
     private readonly Mock<IUserRepository> _userRepositoryMock;
+    private readonly Mock<IAuditService> _auditServiceMock;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IValidator<CreateUserCommand>> _validatorMock;
     private readonly CreateUserCommandHandler _handler;
@@ -25,7 +27,8 @@ public class CreateUserCommandHandlerTests
         _handler = new CreateUserCommandHandler(
             _userRepositoryMock.Object,
             _unitOfWorkMock.Object,
-            _validatorMock.Object);
+            _validatorMock.Object,
+            _auditServiceMock.Object);
     }
 
     [Fact]

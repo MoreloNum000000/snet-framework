@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SNET.Framework.Domain.Entities;
 using SNET.Framework.Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SNET.Framework.Persistence.Repositories
 {
@@ -28,7 +23,7 @@ namespace SNET.Framework.Persistence.Repositories
         public async Task<User> GetByIdWithRoles(Guid userId)
         {
             return await _context.Set<User>()
-                .Include(x => x.Roles)  
+                .Include(x => x.Roles)
                 .Where(x => x.Id == userId)
                 .FirstOrDefaultAsync();
         }
@@ -37,7 +32,7 @@ namespace SNET.Framework.Persistence.Repositories
         {
             return await _context.Set<User>()
                 .Where(x => x.Id == userId)
-                .FirstOrDefaultAsync();  
+                .FirstOrDefaultAsync();
         }
     }
 }
