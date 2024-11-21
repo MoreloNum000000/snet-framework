@@ -28,7 +28,8 @@ public class CreateUserCommandHandlerTests
             _userRepositoryMock.Object,
             _unitOfWorkMock.Object,
             _validatorMock.Object,
-            _auditServiceMock.Object);
+            _auditServiceMock.Object
+            );
     }
 
     [Fact]

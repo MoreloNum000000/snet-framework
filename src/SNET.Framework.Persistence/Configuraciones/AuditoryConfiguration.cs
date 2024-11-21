@@ -9,49 +9,44 @@ namespace SNET.Framework.Persistence.Configuraciones
     {
         public void Configure(EntityTypeBuilder<Auditory> builder)
         {
-            // Definir la clave primaria
             builder.HasKey(e => e.Id);
 
-            // Definir la tabla en la base de datos
             builder.ToTable("Auditories");
 
-            // Mapear propiedades con restricciones de longitud
             builder.Property(e => e.Host)
                    .IsRequired()
                    .HasMaxLength(200);
 
             builder.Property(e => e.Description)
                    .IsRequired()
-                   .HasMaxLength(500);
+                   .HasMaxLength(1000);
 
-            // Configuración para las claves foráneas (LevelId y CrudOperationId)
-            builder.HasOne(e => e.Level)  // Relación con la entidad Level
-                   .WithMany(l => l.Auditory)  // Un Level puede tener muchas auditorías
+            builder.HasOne(e => e.Level)  
+                   .WithMany(l => l.Auditory)  
                    .HasForeignKey(e => e.LevelId)
-                   .OnDelete(DeleteBehavior.Restrict);  // No eliminar auditoría si se elimina un Level
+                   .OnDelete(DeleteBehavior.Restrict);  
 
-            builder.HasOne(e => e.CrudOperation)  // Relación con la entidad CrudOperation
-                   .WithMany(c => c.Auditory)  // Un CrudOperation puede tener muchas auditorías
+            builder.HasOne(e => e.CrudOperation) 
+                   .WithMany(c => c.Auditory)  
                    .HasForeignKey(e => e.CrudOperationId)
-                   .OnDelete(DeleteBehavior.Restrict);  // No eliminar auditoría si se elimina un CrudOperation
+                   .OnDelete(DeleteBehavior.Restrict);  
 
             // Convertir enums a int para la base de datos (si aplica, por ejemplo, si LevelId o CrudOperationId son enums)
             builder.Property(e => e.LevelId)
                    .IsRequired()
-                   .HasConversion<int>(); // Convertir enum a int para la base de datos
+                   .HasConversion<int>(); 
 
             builder.Property(e => e.CrudOperationId)
                    .IsRequired()
-                   .HasConversion<int>(); // Convertir enum a int para la base de datos
+                   .HasConversion<int>(); 
 
             // Configuración para propiedades complejas como JSON (Data)
             builder.Property(e => e.Data)
                    .HasConversion(
                        v => JsonConvert.SerializeObject(v), // Serializar al guardar
                        v => JsonConvert.DeserializeObject<Dictionary<string, object>>(v)) // Deserializar al leer
-                   .HasColumnType("nvarchar(max)"); // Usar "nvarchar(max)" para SQL Server
+                   .HasColumnType("nvarchar(max)"); 
 
-            // Configurar la fecha de creación
             builder.Property(e => e.Created)
                    .IsRequired();
         }

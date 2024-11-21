@@ -23,7 +23,8 @@ namespace SNET.Framework.Features.Users.Commands
             IUserRepository userRepository,
             IUnitOfWork unitOfWork,
             IValidator<CreateUserCommand> validator,
-            IAuditService auditService)
+            IAuditService auditService
+            )
         {
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
